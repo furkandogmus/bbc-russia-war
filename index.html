@@ -36,7 +36,7 @@
         .top-bar {
             background: #080a0e;
             border-bottom: 1px solid #1a1d24;
-            padding: 8px 0;
+            padding: 6px 0;
             font-size: 12px;
             color: #6b7280;
         }
@@ -44,6 +44,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .top-bar-date {
             font-weight: 500;
@@ -61,13 +63,90 @@
         }
         .top-bar-links {
             display: flex;
-            gap: 20px;
+            gap: 16px;
         }
         .top-bar-links a {
             color: #6b7280;
             transition: color 0.2s;
         }
         .top-bar-links a:hover { color: #e8eaed; }
+
+        /* ===================== WAR STATS BAR ===================== */
+        .war-stats-bar {
+            background: linear-gradient(135deg, #0f1117 0%, #141822 100%);
+            border-bottom: 1px solid #1e2330;
+            padding: 12px 0;
+            position: sticky;
+            top: 76px;
+            z-index: 99;
+            backdrop-filter: blur(10px);
+        }
+        .war-stats-bar .war-stats-inner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .war-stat-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-right: 20px;
+            border-right: 1px solid #1a1d24;
+        }
+        .war-stat-group:last-child { border-right: none; }
+        .war-stat-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+        .war-stat-label {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        .war-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f0f2f5;
+            line-height: 1.2;
+        }
+        .war-stat-value.red { color: #ef4444; }
+        .war-stat-value.blue { color: #60a5fa; }
+        .war-stat-value.yellow { color: #facc15; }
+        .war-stat-value.green { color: #4ade80; }
+
+        .war-stats-divider {
+            flex: 1;
+            min-width: 20px;
+        }
+        .war-stats-attribution {
+            font-size: 11px;
+            color: #4b5563;
+            white-space: nowrap;
+        }
+        .war-stats-attribution a { color: #60a5fa; }
+
+        @media (max-width: 768px) {
+            .war-stats-bar { top: 110px; }
+            .war-stats-bar .war-stats-inner { gap: 12px; }
+            .war-stat-group {
+                padding-right: 12px;
+                gap: 6px;
+            }
+            .war-stat-value { font-size: 14px; }
+            .war-stat-label { font-size: 10px; }
+            .war-stat-icon { font-size: 15px; }
+            .war-stats-attribution { display: none; }
+        }
+        @media (max-width: 480px) {
+            .war-stats-bar { top: 130px; }
+            .war-stats-bar .war-stats-inner { gap: 8px; }
+            .war-stat-group { padding-right: 8px; }
+            .war-stat-value { font-size: 13px; }
+        }
 
         /* ===================== MAIN HEADER ===================== */
         .main-header {
@@ -745,18 +824,53 @@
     </div>
 </header>
 
-<!-- ==================== BREADCRUMB ==================== -->
+<!-- ==================== WAR STATS BAR ==================== -->
+<div class="war-stats-bar">
 <div class="container">
-    <div class="breadcrumb">
-        <a href="#">Ana Sayfa</a>
-        <span class="sep">›</span>
-        <a href="#">Haberler</a>
-        <span class="sep">›</span>
-        <span style="color:#9aa0a8">Rusya-Ukrayna Savaşı</span>
+    <div class="war-stats-inner">
+        <div class="war-stat-group">
+            <span class="war-stat-icon">📆</span>
+            <div>
+                <div class="war-stat-label">Savaşın Günü</div>
+                <div class="war-stat-value red">1.572</div>
+            </div>
+        </div>
+        <div class="war-stat-group">
+            <span class="war-stat-icon">⚔️</span>
+            <div>
+                <div class="war-stat-label">Son 24s Çatışma</div>
+                <div class="war-stat-value red">229</div>
+            </div>
+        </div>
+        <div class="war-stat-group">
+            <span class="war-stat-icon">💣</span>
+            <div>
+                <div class="war-stat-label">Hava Saldırısı</div>
+                <div class="war-stat-value red">127</div>
+            </div>
+        </div>
+        <div class="war-stat-group">
+            <span class="war-stat-icon">🛸</span>
+            <div>
+                <div class="war-stat-label">Drone Saldırısı</div>
+                <div class="war-stat-value yellow">9.192</div>
+            </div>
+        </div>
+        <div class="war-stat-group">
+            <span class="war-stat-icon">📰</span>
+            <div>
+                <div class="war-stat-label">Toplanan Haber</div>
+                <div class="war-stat-value blue" id="warStatCount">23</div>
+            </div>
+        </div>
+        <div class="war-stats-divider"></div>
+        <div class="war-stats-attribution">
+            <span id="currentDate2">Yükleniyor...</span> · <a href="https://www.bbc.co.uk/news/topics/cx1m7zg0gzdt" target="_blank">BBC</a>
+        </div>
     </div>
 </div>
+</div>
 
-<!-- ==================== HERO ==================== -->
 <div class="container">
     <div class="hero" id="heroSection">
         <!-- JS tarafından doldurulacak -->
@@ -827,34 +941,12 @@
                 </div>
             </div>
 
-            <!-- Savaş İstatistikleri -->
+            <!-- Savaş İstatistikleri
             <div class="sidebar-card">
                 <div class="sidebar-card-header">📊 Savaş Künyesi</div>
-                <div class="sidebar-card-body">
-                    <div class="stat-list">
-                        <div class="stat-row">
-                            <span class="stat-row-label">Savaşın Günü</span>
-                            <span class="stat-row-value red">1.572</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-row-label">Son 24s Çatışma</span>
-                            <span class="stat-row-value red">229</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-row-label">Hava Saldırısı (24s)</span>
-                            <span class="stat-row-value red">127</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-row-label">Drone Saldırısı (24s)</span>
-                            <span class="stat-row-value yellow">9.192</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-row-label">Toplanan Haber</span>
-                            <span class="stat-row-value blue" id="sidebarTotal">0</span>
-                        </div>
-                    </div>
-                </div>
+                ...
             </div>
+            -->
 
         </aside>
     </div>
@@ -1013,7 +1105,8 @@
         const pageItems = filtered.slice(start, start + perPage);
 
         document.getElementById('totalCount').textContent = filtered.length;
-        document.getElementById('sidebarTotal').textContent = filtered.length;
+        const wsc = document.getElementById('warStatCount');
+        if (wsc) wsc.textContent = filtered.length;
 
         if (pageItems.length === 0) {
             grid.innerHTML = `<div style="text-align:center;padding:48px 0;color:#6b7280;">Bu kategoride henüz haber bulunmuyor.</div>`;
@@ -1140,6 +1233,8 @@
         const days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
         const dateStr = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
         document.getElementById('currentDate').textContent = dateStr;
+        const el2 = document.getElementById('currentDate2');
+        if (el2) el2.textContent = dateStr;
         document.getElementById('footerUpdateTime').textContent = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
     }
 
